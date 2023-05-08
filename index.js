@@ -42,7 +42,7 @@ const options = {
 		},
 		servers: [
 			{
-				url: "",
+				url: "https://dentcarebackend.up.railway.app",
 			},
 		],
 	},

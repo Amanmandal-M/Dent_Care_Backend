@@ -9,7 +9,10 @@ const logsData = async (req,res,next) => {
         const clientIP = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
         const userIPAddress = `${clientIP}`;
         const location = geoip.lookup(userIPAddress);
-        console.log(location);
+        console.log('Country:', location.country);
+        console.log('City:', location.city);
+        console.log('Latitude:', location.ll[0]);
+        console.log('Longitude:', location.ll[1]);
         const data = new logModel({
             DateandTime: `${new Date()}`,
             Method: `${req.method}`,

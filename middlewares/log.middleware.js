@@ -9,26 +9,18 @@ const logsData = async (req,res,next) => {
         const clientIP = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
         const apiKey = process.env.GOOGLEAPIKEY;
 
-        axios
-        .post(`https://www.googleapis.com/geolocation/v1/geolocate?key=${apiKey}`)
-        .then(response => {
-          const { lat, lng } = response.data.location;
-          const geocodingUrl = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${apiKey}`;
-    
-          axios
-            .get(geocodingUrl)
-            .then(response => {
-              const city = extractCityFromGeocodingResponse(response.data);
-            console.log(lat);
-            console.log(lng);
-            console.log(city);
-            })
-            .catch(error => {
-              console.error('Error:', error.message);
-              res.status(500).json({ error: 'Failed to retrieve location' });
-            });
-        })
+        const PostingData = axios.post(`https://www.googleapis.com/geolocation/v1/geolocate?key=${apiKey}`)
+        const respo = await PostingData.json();
+        const { lat, lng } = respo.data.location;
 
+        const geocodingUrl = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${apiKey}`;
+    
+        const GetData = axios.get(geocodingUrl)
+        const respon = await GetData.json();
+        const city = extractCityFromGeocodingResponse(respon.data);
+        console.log(city);
+        console.log(lat);
+        console.log(lng);
 
         const data = new logModel({
             DateandTime: `${new Date()}`,
